@@ -6,7 +6,7 @@
     'author': '',
     'website': '',
     'category': '',
-    'depends': ['base', 'web'],
+    'depends': ['base', 'account', 'account_reports'],
     "data": [
         "views/account_report_views.xml"
     ],

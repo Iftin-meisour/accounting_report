@@ -5,11 +5,49 @@
     <record id="view_account_report_form" model="ir.ui.view">
         <field name="name">view.account.report.form</field>
         <field name="model">account.report</field>
-        <field name="inherit_id" ref=""/>
+        <field name="inherit_id" ref="account_reports.account_report_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='']">
-            </xpath>
+          <xpath expr="//field[@name='filter_partner']" position="after">
+            <field name="filter_product"/>
+          </xpath>
         </field>
     </record>
-
+    <record id="income_by_product" model="account.report">
+      <field name="name">Income By Product</field>
+      <field name="filter_date_range" eval="False"/>
+      <field name="filter_unfold_all" eval="True"/>
+      <field name="filter_partner" eval="True"/>
+      <field name="filter_product" eval="True"/>
+      <field name="filter_period_comparison" eval="False"/>
+      <field name="filter_account_type">disabled</field>
+      <field name="filter_hierarchy">never</field>
+      <field name="filter_show_draft" eval="False"/>
+      <field name="filter_multi_company">selector</field>
+      <field name="default_opening_date_filter">today</field>
+      <!-- <field name="custom_handler_model_id" ref="model_account_aged_receivable_report_handler"/> -->
+      <field name="column_ids">
+          <record id="income_by_product_balance" model="account.report.column">
+              <field name="name">Balance</field>
+              <field name="expression_label">balance</field>
+              <field name="figure_type">monetary</field>
+              <field name="sortable" eval="True"/>
+          </record>
+          
+      </field>
+      <field name="line_ids">
+        <record id="aged_receivable_line" model="account.report.line">
+            <field name="name">Products</field>
+            <field name="groupby">product_id, account_id</field>
+            <field name="expression_ids">
+                <record id="income_by_product_id" model="account.report.expression">
+                    <field name="label">balance</field>
+                    <field name="engine">domain</field>
+                    <field name="formula">[('account_id.account_type', 'in', ['income', 'expense_direct_cost']), ]</field>
+                    <field name="subformula">-sum</field>
+                </record>
+                
+            </field>
+        </record>
+      </field>
+  </record>
   </odoo>
